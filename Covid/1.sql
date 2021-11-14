@@ -1,18 +1,18 @@
 use portfolio;
 select * from covid_death
-WHERE continent !=''
+
 order by 3,4;
 
 -- Selecting Data
 SELECT location, date, total_cases, new_cases, total_deaths, population
 FROM covid_death
-WHERE continent is not null
+WHERE continent !=''
 ORDER BY 1,YEAR(2);
 
 -- Total Cases Vs Total Death
 SELECT location, date, total_cases, total_deaths, population, (total_deaths/total_cases)*100 as percentage
 FROM covid_death
-WHERE continent is not null
+WHERE continent !=''
 ORDER BY 1,YEAR(2);
 
 -- Total Cases Vs Total Death
@@ -35,7 +35,7 @@ ORDER BY 1,YEAR(2);
 
 SELECT location,  MAX(total_cases) as highest_infection_per_location,  population, MAX((total_cases/population)) *100 as percentage_highest_infection_per_location
 FROM covid_death
-GROUP BY population,location
+GROUP BY location,population
 ORDER BY 4 DESC;
 
 -- Looking at countries with highest death rate
@@ -86,7 +86,29 @@ where continent !=''
 -- GROUP BY date
 ORDER BY YEAR(1),2;
 
+SELECT location,date, total_cases
+FROM covid_death;
 
+
+SELECT location, YEAR(date), SUM(total_cases)
+FROM covid_death
+GROUP BY location,YEAR(date);
+
+
+
+
+SELECT
+	continent,coalesce(continent,CONCAT(continent,location)) as filter
+FROM
+	covid_death;
+
+-- Changed the '' of continent as NULL
+update covid_death 
+set continent =
+	CASE
+	when continent ='' then  replace(continent,'',NULL)
+	else continent
+    end 
 
 
 
